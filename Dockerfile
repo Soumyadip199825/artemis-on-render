@@ -1,4 +1,4 @@
-FROM apache/activemq-artemis:2.31.2
+FROM quay.io/artemiscloud/activemq-artemis-broker:1.0.20
 
 ENV ARTEMIS_USER=admin
 ENV ARTEMIS_PASSWORD=admin
