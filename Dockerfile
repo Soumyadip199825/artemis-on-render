@@ -1,10 +1,11 @@
 FROM apache/activemq-artemis:2.31.2
 
-RUN /opt/apache-artemis/bin/artemis create /var/lib/artemis-instance \
---user admin --password admin --require-login
+ENV ARTEMIS_INSTANCE=/var/lib/artemis-instance
+ENV ARTEMIS_USER=admin
+ENV ARTEMIS_PASSWORD=admin
 
-WORKDIR /var/lib/artemis-instance
+WORKDIR $ARTEMIS_INSTANCE
 
 # EXPOSE 61616 8161
 
-CMD ["./bin/artemis","run"]
+CMD ["/opt/apache-artemis/bin/artemis","run"]
