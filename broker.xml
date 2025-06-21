@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<broker xmlns="http://activemq.apache.org/schema">
+
+   <broker-properties>
+      <!-- Enable persistence for messages and data -->
+      <persistence-enabled>true</persistence-enabled>
+      <!-- Directories for various persistent components, relative to BROKER_INSTANCE_DIR -->
+      <journal-directory>data/journal</journal-directory>
+      <bindings-directory>data/bindings</bindings-directory>
+      <large-messages-directory>data/large-messages</large-messages-directory>
+      <paging-directory>data/paging</paging-directory>
+      <!-- Max disk usage percentage before paging starts -->
+      <max-disk-usage>90</max-disk-usage>
+   </broker-properties>
+
+   <acceptors>
+      <!--
+        This acceptor allows connections over various protocols (CORE, AMQP, STOMP, MQTT, HORNETQ, OPENWIRE)
+        listening on all available network interfaces (0.0.0.0) on port 61616.
+      -->
+      <acceptor name="artemis">tcp://0.0.0.0:61616?protocols=CORE,AMQP,STOMP,MQTT,HORNETQ,OPENWIRE</acceptor>
+   </acceptors>
+
+   <!-- Security settings for addresses -->
+   <security-settings>
+      <security-setting match="#">
+         <permission type="createAddress" roles="admin"/>
+         <permission type="deleteAddress" roles="admin"/>
+         <permission type="createDurableQueue" roles="admin"/>
+         <permission type="deleteDurableQueue" roles="admin"/>
+         <permission type="createNonDurableQueue" roles="admin"/>
+         <permission type="deleteNonDurableQueue" roles="admin"/>
+         <permission type="send" roles="admin,producer"/>
+         <permission type="consume" roles="admin,consumer"/>
+      </security-setting>
+   </security-settings>
+
+   <!-- Define addresses and queues -->
+   <addresses>
+      <address name="my.example.address">
+         <anycast>
+            <queue name="myQueue" />
+         </anycast>
+      </address>
+   </addresses>
+
+   <!-- Core security for users and roles -->
+   <core-security enabled="true">
+      <!-- Users defined here will be used for authentication -->
+      <user username="admin" password="admin" roles="admin,producer,consumer"/>
+      <!-- IMPORTANT: Change the default 'admin' password for production! -->
+   </core-security>
+
+   <!-- Hawtio Console Configuration -->
+   <web path="web">
+       <binding uri="http://0.0.0.0:8161">
+           <app url="activemq-branding" war="activemq-branding.war"/>
+           <app url="artemis-plugin" war="artemis-plugin.war"/>
+           <app url="console" war="console.war"/>
+       </binding>
+   </web>
+
+</broker>
